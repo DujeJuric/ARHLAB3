@@ -379,7 +379,7 @@ LCDWR   andi x7,x7,0x7F              ;potprogram za upisivanje slova na LCD
         andi x7,x7,0x7F
         sb x7, 4(s0)
 
-        jalr x7, 0(ra)
+        jalr x7, 0(ra)               ;povratak iz programa
 
         ORG 0x500
 BROJ    DW  49                       ;upis broja
