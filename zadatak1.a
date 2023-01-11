@@ -1,0 +1,385 @@
+      
+MAIN    lui  sp, %hi(0x10000)         ;inicijalizacija stoga
+        addi sp,sp,%lo(0x10000)
+        lui  s0, %hi(0xFFFF0F00)
+        addi s0,s0,%lo(0xFFFF0F00)
+
+        lui x12, %hi(BROJ)            ;učitvanje i spremanje BROJA na registar x10
+      
+        addi x12, x12, %lo(BROJ)
+ 
+        lw x10, 0(x12) 
+
+        jal ra, PRETVORI              ;poziv potprograma PRETVORI
+
+        halt                          ;kraj programa
+  
+PRETVORI 
+
+    addi sp,sp,-4                     ;priprema stoga i priprema LCD ploče
+    sw ra, 0(sp)
+    addi x7,x0,0x0D
+    jal ra, LCDWR 
+       
+
+
+LOOP                                  ;petlja koja uspoređuje broj s 100 te ispisuje zapis, ili ga šalje dalje u sljedeću petlju
+    addi    x3,x3,100
+    blt     x10, x3,DEVEDESET
+        
+   
+    addi    x7,x0,0x43
+    jal     ra, lcdwr 
+   
+
+    addi    x10, x10, -100     
+    jal     x0,LOOP          
+
+
+DEVEDESET                             ;uspoređuje broj s 90 te ispisuje zapis, ili ga šalje dalje u sljedeću petlju
+
+    addi    x3,x3,-10
+    blt     x10, x3,OSAMDESET
+     
+   
+    addi    x7,x0,0x58
+    jal     ra, lcdwr        
+    addi    x7,x0,0x43
+    jal     ra, lcdwr 
+
+    addi    x10, x10, -90
+    addi    x3, x3, -90     
+    jal     x0,LOOP          
+
+
+OSAMDESET                             ;uspoređuje broj s 80 te ispisuje zapis, ili ga šalje dalje u sljedeću petlju
+
+    addi    x3,x3,-10
+    blt     x10, x3,SEDAMDESET
+     
+   
+    addi    x7,x0,0x4C
+    jal     ra, lcdwr 
+    addi    x7,x0,0x58
+    jal     ra, lcdwr 
+    addi    x7,x0,0x58
+    jal     ra, lcdwr 
+    addi    x7,x0,0x58
+    jal     ra, lcdwr        
+     
+
+    addi    x10, x10, -80
+    addi    x3, x3, -80     
+    jal     x0,LOOP   
+
+SEDAMDESET                            ;uspoređuje broj s 70 te ispisuje zapis, ili ga šalje dalje u sljedeću petlju
+
+    addi    x3,x3,-10
+    blt     x10, x3,SESDESET
+     
+   
+    addi    x7,x0,0x4C
+    jal     ra, lcdwr 
+    addi    x7,x0,0x58
+    jal     ra, lcdwr 
+    addi    x7,x0,0x58
+    jal     ra, lcdwr 
+           
+     
+
+    addi    x10, x10, -70
+    addi    x3, x3, -70    
+    jal     x0,LOOP 
+
+SESDESET                             ;uspoređuje broj s 60 te ispisuje zapis, ili ga šalje dalje u sljedeću petlju
+
+    addi    x3,x3,-10
+    blt     x10, x3,PEDESET
+     
+   
+    addi    x7,x0,0x4C
+    jal     ra, lcdwr 
+    addi    x7,x0,0x58
+    jal     ra, lcdwr 
+    
+           
+   
+    addi    x10, x10, -60
+    addi    x3, x3, -60     
+    jal     x0,LOOP 
+
+PEDESET                             ;uspoređuje broj s 50 te ispisuje zapis, ili ga šalje dalje u sljedeću petlju
+
+    addi    x3,x3,-10
+    blt     x10, x3,CETRDST
+     
+   
+    addi    x7,x0,0x4C
+    jal     ra, lcdwr 
+                
+    addi    x10, x10, -50
+    addi    x3, x3, -50     
+    jal     x0,LOOP 
+
+CETRDST                             ;uspoređuje broj s 40 te ispisuje zapis, ili ga šalje dalje u sljedeću petlju
+
+    addi    x3,x3,-10
+    blt     x10, x3,TRIDESET
+
+    addi    x7,x0,0x58
+    jal     ra, lcdwr
+    addi    x7,x0,0x4C
+    jal     ra, lcdwr 
+                
+    addi    x10, x10, -40
+    addi    x3, x3, -40     
+    jal     x0,LOOP 
+  
+ 
+TRIDESET                            ;uspoređuje broj s 30 te ispisuje zapis, ili ga šalje dalje u sljedeću petlju
+ 
+    addi    x3,x3,-10
+    blt     x10, x3,DVADESET
+
+    addi    x7,x0,0x58
+    jal     ra, lcdwr
+    addi    x7,x0,0x58
+    jal     ra, lcdwr
+    addi    x7,x0,0x58
+    jal     ra, lcdwr
+            
+    addi    x10, x10, -30
+    addi    x3, x3, -30     
+    jal     x0,LOOP 
+
+DVADESET                             ;uspoređuje broj s 20 te ispisuje zapis, ili ga šalje dalje u sljedeću petlju
+
+    addi    x3,x3,-10
+    blt     x10, x3,DESET
+
+    addi    x7,x0,0x58
+    jal     ra, lcdwr
+    addi    x7,x0,0x58
+    jal     ra, lcdwr
+    
+            
+    addi    x10, x10, -20
+    addi    x3, x3, -20     
+    jal     x0,LOOP 
+
+DESET                                ;uspoređuje broj s 10 te ispisuje zapis, ili ga šalje dalje u sljedeću petlju
+
+    addi    x3,x3,-10
+    blt     x10, x3,DEVET
+
+    addi    x7,x0,0x58
+    jal     ra, lcdwr
+    
+    
+            
+    addi    x10, x10, -10
+    addi    x3, x3, -10     
+    jal     x0,LOOP 
+
+DEVET                                ;uspoređuje broj s 9 te ispisuje zapis, ili ga šalje dalje u sljedeću petlju
+
+    addi    x3,x3,-1
+    blt     x10, x3, OSAM
+
+    addi    x7,x0,0x49
+    jal     ra, lcdwr   
+    addi    x7,x0,0x58
+    jal     ra, lcdwr
+
+    addi x7,x0,0x0A
+    jal ra, LCDWR
+
+    lw ra, 0(sp)                     ;povratak u main
+    addi sp, sp, 4
+    jalr x0, 0(ra)
+
+
+OSAM                                 ;uspoređuje broj s 8 te ispisuje zapis, ili ga šalje dalje u sljedeću petlju
+
+    addi    x3,x3,-1
+    blt     x10, x3, SEDAM
+
+    addi    x7,x0,0x56
+    jal     ra, lcdwr   
+    addi    x7,x0,0x49
+    jal     ra, lcdwr
+    addi    x7,x0,0x49
+    jal     ra, lcdwr
+    addi    x7,x0,0x49
+    jal     ra, lcdwr
+
+    addi x7,x0,0x0A
+    jal ra, LCDWR
+
+    lw ra, 0(sp)                     ;povratak u main
+    addi sp, sp, 4
+    jalr x0, 0(ra)
+
+
+
+SEDAM                                ;uspoređuje broj s 7 te ispisuje zapis, ili ga šalje dalje u sljedeću petlju
+
+    addi    x3,x3,-1
+    blt     x10, x3, SEST
+
+    addi    x7,x0,0x56
+    jal     ra, lcdwr   
+    addi    x7,x0,0x49
+    jal     ra, lcdwr
+    addi    x7,x0,0x49
+    jal     ra, lcdwr
+
+    addi x7,x0,0x0A
+    jal ra, LCDWR
+   
+
+    lw ra, 0(sp)                     ;povratak u main
+    addi sp, sp, 4
+    jalr x0, 0(ra)
+
+
+SEST                                 ;uspoređuje broj s 6 te ispisuje zapis, ili ga šalje dalje u sljedeću petlju
+
+    addi    x3,x3,-1
+    blt     x10, x3, PET
+
+    addi    x7,x0,0x56
+    jal     ra, lcdwr   
+    addi    x7,x0,0x49
+    jal     ra, lcdwr
+
+    addi x7,x0,0x0A
+    jal ra, LCDWR
+   
+   
+
+    lw ra, 0(sp)                     ;povratak u main
+    addi sp, sp, 4
+    jalr x0, 0(ra)
+
+PET                                  ;uspoređuje broj s 5 te ispisuje zapis, ili ga šalje dalje u sljedeću petlju
+
+    addi    x3,x3,-1
+    blt     x10, x3, CETIRI
+
+    addi    x7,x0,0x56
+    jal     ra, lcdwr   
+   
+   
+   
+    addi x7,x0,0x0A
+    jal ra, LCDWR 
+
+    lw ra, 0(sp)                     ;povratak u main
+    addi sp, sp, 4
+    jalr x0, 0(ra)
+
+
+
+CETIRI                               ;uspoređuje broj s 4 te ispisuje zapis, ili ga šalje dalje u sljedeću petlju
+
+    addi    x3,x3,-1
+    blt     x10, x3, TRI
+
+    addi    x7,x0,0x49
+    jal     ra, lcdwr
+    addi    x7,x0,0x56
+    jal     ra, lcdwr 
+
+
+    addi x7,x0,0x0A
+    jal ra, LCDWR  
+   
+   
+   
+
+    lw ra, 0(sp)                     ;povratak u main
+    addi sp, sp, 4
+    jalr x0, 0(ra)
+
+
+TRI                                  ;uspoređuje broj s 3 te ispisuje zapis, ili ga šalje dalje u sljedeću petlju
+
+    addi    x3,x3,-1
+    blt     x10, x3, DVA
+
+    addi    x7,x0,0x49
+    jal     ra, lcdwr
+    addi    x7,x0,0x49
+    jal     ra, lcdwr
+    addi    x7,x0,0x49
+    jal     ra, lcdwr
+
+
+    addi x7,x0,0x0A
+    jal ra, LCDWR
+       
+   
+   
+   
+
+    lw ra, 0(sp)                     ;povratak u main
+    addi sp, sp, 4
+    jalr x0, 0(ra)
+
+
+
+DVA                                  ;uspoređuje broj s 2 te ispisuje zapis, ili ga šalje dalje u sljedeću petlju
+
+    addi    x3,x3,-1
+    blt     x10, x3, JEDAN
+
+    addi    x7,x0,0x49
+    jal     ra, lcdwr
+    addi    x7,x0,0x49
+    jal     ra, lcdwr
+
+    addi x7,x0,0x0A
+    jal ra, LCDWR
+    
+ 
+    lw ra, 0(sp)                     ;povratak u main
+    addi sp, sp, 4
+    jalr x0, 0(ra)
+
+JEDAN                                ;uspoređuje broj s 1 te ispisuje zapis, ili ga šalje dalje u sljedeću petlju
+
+    addi    x3,x3,-1
+    blt     x10, x3, NULA
+
+    addi    x7,x0,0x49
+    jal     ra, lcdwr
+
+    addi x7,x0,0x0A
+    jal ra, LCDWR
+              
+    lw ra, 0(sp)                     ;povratak u main
+    addi sp, sp, 4
+    jalr x0, 0(ra)
+
+NULA   
+
+    addi x7,x0,0x0A                  
+    jal ra, LCDWR 
+
+    lw ra, 0(sp)                     ;povratak u main
+    addi sp, sp, 4
+    jalr x0, 0(ra)
+
+
+LCDWR   andi x7,x7,0x7F              ;potprogram za upisivanje slova na LCD
+        sb x7, 4(s0)
+        ori x7,x7,0x80
+        sb x7, 4(s0)
+        andi x7,x7,0x7F
+        sb x7, 4(s0)
+
+        jalr x7, 0(ra)
+
+        ORG 0x500
+BROJ    DW  49                       ;upis broja
